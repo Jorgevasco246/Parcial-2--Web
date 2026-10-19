@@ -14,10 +14,15 @@ export class ReservationsService {
     @InjectRepository(RoomEntity)
     private readonly roomsRepository: Repository<RoomEntity>,
     // TODO 2: Inject ReservationRulesService through this constructor.
+    private readonly reservationRulesService: ReservationRulesService
   ) {}
 
   async cancel(id: number): Promise<ReservationEntity> {
     // TODO 2: Coordinate the operation according to the examination.
+    const room = await this.findOne(id);
+    this.reservationRulesService.ensureCanCancel(room);
+    room.status = 'cancelled';
+    return this.reservationRulesService.save(room);
     throw new NotImplementedException('TODO 2: implement cancellation');
   }
 
