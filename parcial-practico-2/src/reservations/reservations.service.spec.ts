@@ -6,6 +6,7 @@ import { ReservationEntity } from './entities/reservation.entity';
 import { ReservationRulesService } from './reservation-rules.service';
 import { ReservationsService } from './reservations.service';
 import { beforeEach, describe, it } from 'node:test';
+import { jest } from "@jest/globals";
 
 describe('ReservationsService', () => {
   let service: ReservationsService;
@@ -51,26 +52,10 @@ describe('ReservationsService', () => {
 
     // TODO TEST 2: Arrange dependencies, call cancel(7), and check the required behavior.
 
-    it("El servicio cancela y guarda", async () => {
-    //Arrange
-    const reservaMock = {
-      status: "active",
-    } as ReservationEntity;
+    await expect(service.findOne(7)).toEqual(
+    reservation,
+  );
 
-    reservaMock(orderMock);
-
-    // Act
-    const result = await service.findOne(7);
-
-    //Assert
-    expect(result).toEqual(orderMock);
-    expect(repositoryMock.findOne).toHaveBeenCalledWith({
-      where: { id: 7 },
-      relations: { customer: true },
-    });
-  });
-
-    
     throw new Error('TODO TEST 2: complete the successful cancellation test');
   });
 
@@ -84,6 +69,15 @@ describe('ReservationsService', () => {
     } as ReservationEntity;
 
     // TODO TEST 3: Make the mock rule reject this ACTIVE reservation, as requested.
+
+    repository.findOne.mockResolvedValue(reservation);
+
+    await expect(service.cancel(9)).rejects.toThrow(
+      ConflictException
+    );
+
+    expect(reservation.status).toBe('active')
+    expect(reservation.save).not.toHaveBeenCalled();
   
     // Check the exception, the unchanged state, and the absence of a save() call.
     throw new Error('TODO TEST 3: complete the rejected cancellation test');
@@ -91,5 +85,4 @@ describe('ReservationsService', () => {
 });
 function expect(arg0: Promise<ReservationEntity>) {
   throw new Error('Function not implemented.');
-}
-
+}})
