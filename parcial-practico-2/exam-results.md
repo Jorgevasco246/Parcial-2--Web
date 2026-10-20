@@ -24,3 +24,31 @@ Registrar el resultado de `npm test`.
 | 3. Si la regla simulada rechaza, conserva active y no guarda. | Pendiente |
 
 Resumen de ejecución: pendiente.
+
+Las peticiones realizadas fueron:
+{/api}{/api, GET} {/api/rooms} {/api/rooms, GET} {/api/reservations}{/api/reservations, POST} {/api/reservations/:id/cancel, PATCH}{/api/reservations, GET} {/api/reservations/:id, GET} 
+
+y estos fueron los resultados del test: Test Suites: 2 failed, 2 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        1.035 s
+Ran all test suites.
+▶ ReservationRulesService
+  ▶ rejects a reservation that is already cancelled
+    ✔ rejects an order that is already ready (17.3552ms)
+  ✔ rejects a reservation that is already cancelled (18.0774ms)
+✔ ReservationRulesService (19.1889ms)
+ℹ tests 2
+ℹ suites 1
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 134.3977
+ 
+ Y estos fueron algunos de los codigos http:
+ GET http://localhost:3003/api/rooms: 200 ok
+ GET http://localhost:3003/api/reservations: 200 ok
+ GET http://localhost:3003/api/reservations/1: 200 ok
+ PATCH http://localhost:3003/api/reservations/1/cancel: 200
